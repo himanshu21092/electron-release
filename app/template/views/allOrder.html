@@ -1,0 +1,336 @@
+<div class="mainscreen-seeting-background"></div>
+<div class="main-container">
+    <section id="content">
+        <div class="col-sm-12 no-padding">
+            <div class="col-sm-4 main-right no-padding" style="border: 1px solid #979797;">
+                <div class="col-sm-12 no-padding">
+                    <div class="left-header-icon-allOrder" ng-click="onSettingsBack()"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+                    <div class="allOrder-left-header">All Order</div>
+                </div>
+                <div class="col-sm-12 no-padding">
+                    <div class="allOrder-left-header-tab col-sm-6" ng-class="selOrderType=='Open' ? 'allOrder-seltab' : ''" ng-click="getOrderBasedOnType(1)">Open</div>
+                    <div class="allOrder-left-header-tab col-sm-6" ng-class="selOrderType=='Completed' ? 'allOrder-seltab' : ''" ng-click="getOrderBasedOnType(0)">Completed</div>
+                </div>
+                <div class=" col-sm-12 left-content-icon-div">
+                    <div class="left-content-filter">Filters :</div>
+                    <div class="left-content-icon" ng-click="getOrderBasedOnFilter(0)" ng-class="{'activated':filters[0] == 1}">
+                        <!--<img src="assets/img/grocery.png" class="allOrder-img-left-pickup"></img>-->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="19" viewBox="0 0 20 19">
+                            <title> grocery</title>
+                            <desc> Created with Sketch.</desc>
+                            <g>
+                                <g>
+                                    <path d="M17.5 5.3C17.5 4.7 16.9 4.2 16.3 4.2L13.6 4.2C13.6 2.1 12.3 0.5 10.8 0.5 9.2 0.5 7.9 2.1 7.9 4.2L4.4 4.2C3.7 4.2 3.2 4.7 3.2 5.3L0.8 17.5C0.8 18.1 1.3 18.6 2 18.6L18.6 18.6C19.3 18.6 19.8 18.1 19.8 17.5L17.5 5.3 17.5 5.3ZM10.8 1C12.1 1 13.2 2.4 13.2 4.2L8.3 4.2C8.3 2.4 9.4 1 10.8 1L10.8 1Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="left-content-icon" ng-click="getOrderBasedOnFilter(1)" ng-class="{'activated':filters[1] == 1}">
+                        <!--<img src="assets/img/dinein.png" class="allOrder-img-left-car"></img>-->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="18" viewBox="0 0 20 18">
+                            <title> dinein</title>
+                            <desc> Created with Sketch.</desc>
+                            <g>
+                                <g>
+                                    <path d="M4.9 2.3C2.3 0.5 0.2 0.6 0.2 0.6L0.2 0.6C0.1 0.6 0.1 0.6 0 0.7 -0.1 0.7-0.1 0.8 0 0.9 0 0.9 0 0.9 0 0.9L0 0.9 7.1 8C7.1 8.1 7.2 8.1 7.2 8.1L7.4 8.3 7.9 8.8 9 7.6C8.6 6 6.4 3.5 4.9 2.3L4.9 2.3Z"
+                                    />
+                                    <path d="M16.9 17.8L17.4 17.7C17.5 17.6 17.6 17.6 17.7 17.5L18 17.2C18.1 17.1 18.1 17 18.2 16.9L18.2 16.4C18.3 16.3 18.2 16.2 18.1 16.1L11.8 10.3 10.6 11.5 16.5 17.7C16.6 17.8 16.8 17.8 16.9 17.8Z"
+                                    />
+                                    <path d="M19.1 2.3L19.1 2.3C19 2.2 18.9 2.2 18.8 2.3L15.1 6.1C15 6.1 14.9 6.1 14.8 6.1 14.7 6 14.7 5.9 14.8 5.8L18.4 2C18.5 1.9 18.5 1.8 18.4 1.7L18.4 1.7C18.3 1.6 18.2 1.6 18.1 1.7L14.2 5.5C14.1 5.5 14 5.5 13.9 5.5 13.9 5.4 13.9 5.3 13.9 5.2L17.7 1.2C17.8 1.1 17.8 1 17.7 0.9L17.7 0.9C17.6 0.9 17.5 0.8 17.4 0.9L13.6 4.6C13.5 4.7 13.4 4.7 13.3 4.6 13.2 4.5 13.2 4.4 13.3 4.3L17.1 0.6C17.1 0.5 17.1 0.4 17.1 0.3L17 0.3C17 0.2 16.8 0.2 16.8 0.3L13 4C12.9 4 12.8 4.2 12.7 4.3L11.8 6C11.8 6.1 11.7 6.3 11.6 6.3L9.7 8.3 8.5 9.4 2.4 15.5C2.3 15.5 2.2 15.7 2.3 15.8L2.4 16.3C2.4 16.4 2.5 16.5 2.6 16.6L2.9 16.9C2.9 17 3.1 17 3.2 17.1L3.6 17.2C3.7 17.2 3.9 17.1 3.9 17L9.9 10.9 11.1 9.7 13.1 7.7C13.1 7.6 13.3 7.5 13.4 7.5L15.1 6.7C15.2 6.6 15.3 6.5 15.4 6.4L19.1 2.6C19.1 2.5 19.1 2.4 19.1 2.3L19.1 2.3Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="left-content-icon" ng-click="getOrderBasedOnFilter(2)" ng-class="{'activated':filters[2] == 1}">
+                        <!--<img src="assets/img/pickup.png "  class="allOrder-img-left-pickup"></img>-->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="22" viewBox="0 0 16 22">
+                            <title> pickup</title>
+                            <desc> Created with Sketch.</desc>
+                            <g>
+                                <g>
+                                    <path d="M4.1 4.2C3.8 3.8 3.1 3.6 2.6 3.8L2.2 4C1.7 4.2 1.4 3.9 1.5 3.4L2.2 1.2C2.4 0.6 2.9 0.3 3.5 0.4L12.1 2.4C12.6 2.5 12.8 3 12.6 3.5L11.8 5.1C11.5 5.6 11 5.6 10.6 5.3L10.3 5C10 4.6 9.3 4.5 8.8 4.8L8.8 4.8C8.3 5.1 7.6 5.1 7.3 4.6 6.9 4.2 6.2 4.1 5.7 4.4L5.5 4.6C5 4.8 4.4 4.7 4.1 4.2L4.1 4.2 4.1 4.2Z"
+                                    />
+                                    <path d="M15.7 13.3C15.6 12.7 15.4 11.9 15.2 11.4L14.7 10.2C14.4 9.7 14.1 8.9 14 8.3L13.6 5.8C13.5 5.2 13.4 5.2 13.3 5.8L13 9.3C12.9 9.9 12.9 10.3 12.8 10.4 12.8 10.4 12.6 10.8 12.4 11.3L12.3 11.6C12 12.1 11.9 12.9 11.9 13.5L11.9 17.9C11.9 18.5 12.3 18.6 12.6 18.2 12.6 18.2 12.9 17.9 13.7 17.9 14.1 17.9 14.6 18.1 15 18.4 15.2 18.5 15.2 18.7 15.1 18.9 15 19 14.7 19.1 14.6 19L14.2 18.7C14 18.7 13.3 18.9 12.9 19.2 12.9 19.2 12.3 19.6 12.1 20.1L12 20.2C12 20.3 11.9 20.4 11.8 20.6 11.8 20.6 11.8 20.6 11.6 20.6 11.6 20.6 11.6 20.6 11.5 20.6L11.4 20.5C11.3 20.4 11.3 19.8 11.2 19.2L11.2 13.4C11.2 12.9 11.1 12.4 11.1 12.4 11.2 12.3 11.4 11.8 11.6 11.3L11.7 11.1C12 10.6 12.2 9.7 12.3 9.2L12.6 5.5C12.7 4.9 12.5 4.9 12.3 5.4L11.9 6.3C11.6 6.8 11.1 6.9 10.7 6.5L10.2 5.9C9.8 5.5 9.1 5.5 8.6 5.8L8.6 5.8C8.1 6.1 7.4 6 7.1 5.6 6.7 5.2 6 5.1 5.5 5.3L5.3 5.5C4.8 5.7 4.2 5.6 3.9 5.2 3.6 4.7 3.2 4.8 3.1 5.4L2.8 7.2C2.6 7.7 2.2 8.5 1.9 8.9L1.6 9.3C1.2 9.7 0.9 10.5 0.9 11.1L0.6 16.9C0.6 17.5 1 18.1 1.5 18.3L10.2 21.4C10.7 21.6 11.6 21.6 12.1 21.3L15.2 19.8C15.7 19.6 16 19 16 18.4L15.7 13.3 15.7 13.3Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="left-content-icon" ng-click="getOrderBasedOnFilter(3)" ng-class="{'activated':filters[3] == 1}">
+                        <!--<img src="assets/img/delivery.png" class="allOrder-img-left-car"></img>-->
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="19" viewBox="0 0 22 19">
+                            <title> delivery</title>
+                            <desc> Created with Sketch.</desc>
+                            <g>
+                                <g>
+                                    <path d="M20.7 8.3L19.4 8.3 18.9 6.8 20.7 6.8C21.1 6.8 21.5 6.4 21.5 6 21.5 5.6 21.1 5.3 20.7 5.3L18.4 5.3 17.4 2.1C17.1 1.3 16.2 0.7 15.4 0.7L6.2 0.7C5.4 0.7 4.5 1.3 4.2 2.1L3.1 5.3 0.9 5.3C0.4 5.3 0.1 5.6 0.1 6 0.1 6.4 0.4 6.8 0.9 6.8L2.6 6.8 2.1 8.3 0.9 8.3C0.4 8.3 0.1 8.6 0.1 9.1L0.1 13.6C0.1 14 0.4 14.4 0.9 14.4L1.6 14.4 1.6 17.4C1.6 18.3 2.3 18.9 3.1 18.9L4.7 18.9C5.5 18.9 6.2 18.3 6.2 17.4L6.2 14.4 15.4 14.4 15.4 17.4C15.4 18.3 16 18.9 16.9 18.9L18.4 18.9C19.3 18.9 19.9 18.3 19.9 17.4L19.9 14.4 20.7 14.4C21.1 14.4 21.5 14 21.5 13.6L21.5 9.1C21.5 8.6 21.1 8.3 20.7 8.3L20.7 8.3ZM5.6 2.6C5.7 2.4 6 2.2 6.2 2.2L9.3 2.2 9.3 3C9.3 3.4 9.6 3.7 10 3.7L11.5 3.7C12 3.7 12.3 3.4 12.3 3L12.3 2.2 15.4 2.2C15.5 2.2 15.9 2.4 15.9 2.6L17.8 8.3 3.7 8.3 5.6 2.6 5.6 2.6ZM4.7 12.9C3.8 12.9 3.1 12.2 3.1 11.3 3.1 10.5 3.8 9.8 4.7 9.8 5.5 9.8 6.2 10.5 6.2 11.3 6.2 12.2 5.5 12.9 4.7 12.9L4.7 12.9ZM13.8 12.9L7.7 12.9 7.7 11.3 13.8 11.3 13.8 12.9 13.8 12.9ZM16.9 12.9C16 12.9 15.4 12.2 15.4 11.3 15.4 10.5 16 9.8 16.9 9.8 17.7 9.8 18.4 10.5 18.4 11.3 18.4 12.2 17.7 12.9 16.9 12.9L16.9 12.9Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="left-content-icon">
+                        <label for="searchOrder" ng-click="showSearchBar()">
+                            <img src="assets/img/search.png" class="allOrder-img-left-search"></img>
+                        </label>
+                    </div>
+                </div>
+                <div class="no-float-input search-order">
+                    <input ng-keypress="searchOrder($event)" ng-blur="hideSearchBar()" id="searchOrder" style="font-size: 18px;" class="search-input"
+                        type="text" name="username" ng-model="searchQuery" placeholder="Search Order" required/>
+                    <span class="bar"></span>
+                </div>
+                <div class="all-order-main">
+                    <div id="searchResults">
+                        {{searchText}}
+                    </div>
+                    <div class="col-sm-12 allorder-val-content no-padding" ng-repeat="order in allOrders | orderType: filters | orderBy: '-updated_at'">
+                        <div class="col-sm-12 allorder-val-content-sub no-padding" ng-class="selindex==order.id ? 'allorder-val-content-sub-sel' : ''"
+                            style="background:white;" ng-click="selOrderDetails(order)">
+                            <div class="col-sm-6 allOrder-val-left-header no-padding">Order Id: {{order.id}}</div>
+                            <div class="col-sm-6 allorder-val-right-header no-padding">
+                                <img style="height: 18px;" ng-if="order.dinein == 1" src="assets/img/dinein.png"></img>
+                                <img style="height: 18px;" ng-if="order.pickup_detail == 1" src="assets/img/pickup.png"></img>
+                                <img style="height: 18px;" ng-if="order.instore == 1" src="assets/img/grocery.png"></img>
+                                <img style="height: 18px;" ng-if="order.delivery_detail == 1 || order.shipping_detail == 1" src="assets/img/delivery.png"></img>
+                            </div>
+                            <div class="col-sm-6 allOrder-vals-left no-padding">Customer Name</div>
+                            <div class="col-sm-6 allOrder-vals-right no-padding">{{order.customer_name || "N.A."}}</div>
+                            <div class="col-sm-6 allOrder-vals-left no-padding">Order Amount</div>
+                            <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{order.amount}}</div>
+                            <div class="col-sm-4 allOrder-vals-left no-padding">Time</div>
+                            <div class="col-sm-8 allOrder-vals-right no-padding">{{ convertDateFormat(order.updated_at) }}</div>
+                            <!--<div class="col-sm-6 allOrder-vals-left no-padding">Payment Method</div>
+                            <div class="col-sm-6 allOrder-vals-right no-padding">{{(order.payment_method == null)?"No":order.payment_method}}</div>-->
+                        </div>
+                    </div>
+                    <div ng-if="showLoadMoreBtn" class="col-sm-12" align="center" style="padding:10px">
+                        <div class="loadmore-btn" ng-click="loadMoreOrders()">Load More</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 main-left no-padding" style="overflow:auto; display:flex">
+                <div class="right-header-div no-padding" ng-show="selOrder.id != undefined && showSelectedOrder == true">
+                    <div class="col-sm-12 allOrder-main-title">
+                        Order Id: {{ selOrder.id}}
+                        <div class="order-main-right-btn">
+                            <div ng-if="!selOrder.open" class="allOrder-main-edit-icon pointer" ng-click="printOrder(selOrder)"><i style="position:static" class="fa fa-print sett-main-edit-icon-i" aria-hidden="true"></i></div>
+                            <div ng-if="selOrder.open" class="allOrder-main-edit-icon pointer" data-toggle="modal" data-target="#markAsComplete"><i class="fa fa-check  allOrder-trash-icon" aria-hidden="true"></i></div>
+                            <div ng-if="selOrder.open" class="allOrder-main-edit-icon pointer" ng-click="editOrder(selOrder)"><i style="position:static" class="fa fa-pencil sett-main-edit-icon-i" aria-hidden="true"></i></div>
+                            <div ng-if="disableDelete && selOrder.open" class="allOrder-main-edit-icon order-type-active pointer" data-toggle="modal" data-target="#deleteallOrder"><i class="fa fa-trash-o allOrder-trash-icon" aria-hidden="true"></i></div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-12 allorder-payment-method-content no-padding">
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Name</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">{{ selOrder.customer_name || "N.A." }} </div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Email</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">{{ selOrder.customer_email || "N.A."}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Phone Number</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">{{ selOrder.customer_phone_no || "N.A." }}</div>
+                    </div>
+
+                    <div class="col-sm-12 allorder-payment-method-content no-padding">
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Time</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">{{ convertDateFormat(selOrder.created_at) }} </div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Channel</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">POS</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Payment Method</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">&nbsp;{{selOrder.payment_method || "N.A."}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Payment Status</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">{{ selOrder.transaction_status == 3 ? 'Processed' : 'Processing' }}</div>
+                    </div>
+                    <div class="col-sm-12 allOrder-right-content-charges no-padding">
+                        <div class="allOrder-right-content-tittle no-padding">Charges</div>
+                    </div>
+                    <div class="col-sm-12 allOrder-main-details ">
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Item(s)</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{selOrder.amount}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Tax(s)</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{selOrder.tax_amount || "0"}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Promotional Discount</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs -{{selOrder.discount_amount || "0"}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Loyalty Discount</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{selOrder.loyality_amount || "0"}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Delivery Charges</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{selOrder.shipping_cost || "0"}}</div>
+                        <div class="col-sm-6 allOrder-vals-left no-padding">Tip Amount</div>
+                        <div class="col-sm-6 allOrder-vals-right no-padding">Rs {{selOrder.tip_amount || "0"}}</div>
+                        <div class="col-sm-12 allOver-content-orderTotal no-padding">
+                            <div class="col-sm-6 allOrder-vals-left-total no-padding">Order Total</div>
+                            <div class="col-sm-6 allOrder-vals-right-total no-padding text-right">Rs {{selOrder.amount}}</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 no-padding allOrder-right-content-item" style="margin-bottom: 20px">
+                        <div class="col-sm-12 allOrder-right-content-charges no-padding">
+                            <div class="allOrder-right-content-tittle no-padding">Items</div>
+                        </div>
+                        <div class="col-sm-12 no-padding allOrder-right-content-item-subHeader ">
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">Item Name</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">Unit Price </div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">Qty</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">Amount</div>
+                        </div>
+                        <div class="col-sm-12 no-padding allOrder-right-content-item-subHeader " ng-repeat="product in selOrder.products">
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem " style="text-transform:capitalize">{{product.product_name}}</div>
+                            <div ng-if="product.quantity_unit == 'unit'" class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.price}}</div>
+                            <div ng-if="product.quantity_unit != 'unit'" class="col-sm-3 allOrder-right-content-item-subHeaderItem "></div>
+                            <div ng-if="product.quantity_unit == 'unit'" class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.quantity}}</div>
+                            <div ng-if="product.quantity_unit != 'unit'" class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.quantity}} {{product.quantity_unit}}</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.amount}}</div>
+                        </div>
+                        <div class="col-sm-12 no-padding allOrder-right-content-item-subHeader " ng-repeat="product in selOrder.miscellaneousProducts">
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.name}}</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.amount}}</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.quantity}}</div>
+                            <div class="col-sm-3 allOrder-right-content-item-subHeaderItem ">{{product.total_amount}}</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="selectOrderImage" align="center" ng-show="!showSelectedOrder">
+                    <div style="align-self:center;color:#009587;font-size:20px">
+                        <img src="assets/img/select_icon@3x.png" height="100px" width="100px">
+                        <div style="margin-top:20px">
+                            Tap or Select Any Order From Left To Load An Order
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+<div class="modal fade" id="markAsComplete" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="cashPaymentForm">
+                <div class="modal-header">
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body no-float-input" ng-init="selectedPaymentMode=1">
+                    <div>
+                        Select payment method used :
+                    </div>
+                    <div align="center" style="margin-top: 20px;">
+                        <div id="paymentMethod" ng-class="{'selected': selectedPaymentMode == 1}" ng-click="selectedPaymentMode = 1">
+                            Card
+                        </div>
+                        <div id="paymentMethod" ng-class="{'selected': selectedPaymentMode == 2}" ng-click="selectedPaymentMode = 2">
+                            Cash
+                        </div>
+                        <div id="paymentMethod" ng-class="{'selected': selectedPaymentMode == 3}" ng-click="selectedPaymentMode = 3">
+                            Others
+                        </div>
+                    </div>
+                    <div style="margin-top:10px" align="center" ng-if="markError">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="20" viewBox="0 0 35 32" style="vertical-align:middle">
+                            <title> error</title>
+                            <desc> Created with Sketch.</desc>
+                            <g fill="none">
+                                <g fill="#F39F33">
+                                    <path d="M34.2 26.4L0.8 26.4C0.4 26.4 0 26.1 0 25.6L0 0.8C0 0.3 0.4 0 0.8 0L34.2 0C34.6 0 35 0.3 35 0.8L35 25.6C35 26.1 34.6 26.4 34.2 26.4ZM1.6 24.9L33.4 24.9 33.4 1.6 1.6 1.6 1.6 24.9Z"
+                                    />
+                                    <path d="M21.2 31.6L13.8 31.6C13.4 31.6 13.1 31.2 13.1 30.8L13.1 25.6C13.1 25.2 13.4 24.9 13.8 24.9L21.2 24.9C21.6 24.9 21.9 25.2 21.9 25.6L21.9 30.8C21.9 31.2 21.6 31.6 21.2 31.6ZM14.6 30L20.4 30 20.4 26.4 14.6 26.4 14.6 30Z"
+                                    />
+                                    <rect x="4.4" y="30" width="26.1" height="1.6" />
+                                    <path d="M30.6 3.6L4.4 3.6C4 3.6 3.7 4 3.7 4.4L3.7 22C3.7 22.4 4 22.8 4.4 22.8L30.6 22.8C31 22.8 31.3 22.4 31.3 22L31.3 4.4C31.3 4 31 3.6 30.6 3.6ZM24.3 18.9L23.2 20 17.5 14.3 11.8 20 10.7 18.9 16.4 13.2 10.7 7.5 11.8 6.4 17.5 12.1 23.2 6.4 24.3 7.5 18.6 13.2 24.3 18.9Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                        <div style="display:inline-block;margin-left:10px;color:#F39F33;font-size:16px">
+                            {{markError}}
+                        </div>
+                    </div>
+                    <div ng-if="selectedPaymentMode == 1">
+                        <div class="full-width input-section">
+                            <label for="cardNumber">Enter Last 4 Digits Of Card</label>
+                            <input class="font-medium-24 full-width" type="text" name="cardNumber" ng-model="paymentMethod.cardNumber" maxlength="4"
+                                ng-keypress="allowNumbersOnly($event)" />
+                            <span class="bar"></span>
+                        </div>
+                    </div>
+                    <div ng-if="selectedPaymentMode == 2" class="full-width" style="overflow:auto">
+                        <div>
+                            <div class="col-md-6 input-section" style="padding: 15px 10px">
+                                <label for="cashAmountPaid">Cash Given</label>
+                                <input ng-keypress="allowNumbersOnly($event)" class="font-medium-24 full-width" type="text" name="cashAmountPaid" ng-model="paymentMethod.cashAmountPaid"
+                                    maxlength="7" placeholder="Rs {{selOrder.amount}}"/>
+                                <span class="bar"></span>
+                            </div>
+                            <div class="col-md-6 input-section" style="padding: 15px 10px">
+                                <label>Change to return</label>
+                                <div class="font-medium-24">{{ calBalanceleft(selOrder.amount, paymentMethod.cashAmountPaid)}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="selectedPaymentMode == 3">
+                        <div class="full-width input-section">
+                            <label for="referenceId">Enter Reference ID</label>
+                            <input class="font-medium-24 full-width" type="text" name="referenceId" ng-model="paymentMethod.referenceId"/>
+                            <span class="bar"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="clear addnote-done-btn" ng-disabled="disableChargeCash(selOrder.amount, paymentMethod.cashAmountPaid)"  ng-click="markAsCompleteAction(selectedPaymentMode)">Confirm</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="deleteallOrder" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-body">
+                <div>
+                    <div class="float-left popuptext">Do you want to delete this order?</div>
+                    <div class="float-right popbtn-base">
+                        <button ng-click="deleteOrder(selOrder.id);" data-dismiss="modal" class="pop-btn" style="border-bottom: 1px solid #979797 !important;">Yes</button>
+                        <button data-dismiss="modal" class="pop-btn">No</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="alertBox" role="dialog">
+    <div class="modal-dialog">
+
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close-addnote float-right" data-dismiss="modal">X</button>
+            </div>
+            <div class="modal-body no-border text-center" style="color:#f39f33; font-size:20px">
+                <svg xmlns="http://www.w3.org/2000/svg" width="35" height="32" viewBox="0 0 35 32" style="vertical-align:middle">
+                    <title> error</title>
+                    <desc> Created with Sketch.</desc>
+                    <g fill="none">
+                        <g fill="#F39F33">
+                            <path d="M34.2 26.4L0.8 26.4C0.4 26.4 0 26.1 0 25.6L0 0.8C0 0.3 0.4 0 0.8 0L34.2 0C34.6 0 35 0.3 35 0.8L35 25.6C35 26.1 34.6 26.4 34.2 26.4ZM1.6 24.9L33.4 24.9 33.4 1.6 1.6 1.6 1.6 24.9Z"
+                            />
+                            <path d="M21.2 31.6L13.8 31.6C13.4 31.6 13.1 31.2 13.1 30.8L13.1 25.6C13.1 25.2 13.4 24.9 13.8 24.9L21.2 24.9C21.6 24.9 21.9 25.2 21.9 25.6L21.9 30.8C21.9 31.2 21.6 31.6 21.2 31.6ZM14.6 30L20.4 30 20.4 26.4 14.6 26.4 14.6 30Z"
+                            />
+                            <rect x="4.4" y="30" width="26.1" height="1.6" />
+                            <path d="M30.6 3.6L4.4 3.6C4 3.6 3.7 4 3.7 4.4L3.7 22C3.7 22.4 4 22.8 4.4 22.8L30.6 22.8C31 22.8 31.3 22.4 31.3 22L31.3 4.4C31.3 4 31 3.6 30.6 3.6ZM24.3 18.9L23.2 20 17.5 14.3 11.8 20 10.7 18.9 16.4 13.2 10.7 7.5 11.8 6.4 17.5 12.1 23.2 6.4 24.3 7.5 18.6 13.2 24.3 18.9Z"
+                            />
+                        </g>
+                    </g>
+                </svg>
+                <div style="display:inline;margin-left:10px;">
+                    {{alertText}}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</section>
+</div>

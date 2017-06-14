@@ -1,0 +1,934 @@
+<div class="mainscreen-background"></div>
+<div class="main-container">
+    <section id="content">
+        <div class="col-sm-12 no-padding">
+            <div class="col-sm-8 main-left no-padding pro-main" ng-show="showProduct">
+                <div class="col-sm-12">
+                    <div class="float-right">
+                        <!--<div class="float-left margin-cal">
+                            <i ng-if="selectedProduct.favorite_product == 0" class="fa fa-star pro-icons" aria-hidden="true" ng-click="addTofavorite(selectedProduct)"></i>
+                            <i ng-if="selectedProduct.favorite_product == 1" class="fa fa-star pro-icons star-yellow" aria-hidden="true" ng-click="removeTofavorite(selectedProduct)"></i>
+                        </div>-->
+                        <div class="close-pro" ng-click="closeProductDetails()"><i class="fa fa-times pro-icons" aria-hidden="true" ng-click="closeProductDetails()"></i></div>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div ng-if="selectedProduct.product_thumbnail != ''" class="product-image" style="background: url({{selectedProduct.product_thumbnail}});"></div>
+                    <div ng-if="selectedProduct.product_thumbnail == '' || selectedProduct.product_thumbnail == undefined" class="product-image" style="background: url('assets/img/Placeholder.png') no-repeat center; background-size:294px 280px"></div>
+                    <div class="add-to-order">
+                        <button class="clear full-height right-charge-btn" ng-click="addProductInOrder(selectedProduct,selectedFromProduct)">Add To Order</button>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="font-medium-24 c888888" style="text-transform:capitalize">{{selectedProduct.name || "N.A."}}</div>
+                    <div class="pro-price-box">
+                        <div ng-if="selectedProduct.price > selectedProduct.discounted_price" class="font-regular-18 pro-mrp">MRP : Rs {{selectedProduct.amount || "N.A."}}</div>
+                        <div class="font-regular-18 pro-price">Price: Rs {{selectedProduct.discounted_price || "N.A."}}</div>
+                    </div>
+                    <div class="pro-info-box">
+                        <div class="pro-info">SKU : {{selectedProduct.sku || "N.A."}}</div>
+                        <div class="pro-info">Barcode : {{selectedProduct.barcode_id || "N.A."}}</div>
+                        <div class="pro-info">Inventory : {{selectedProduct.inventory || "N.A."}}</div>
+                        <div ng-if="selectedProduct.is_dynamic == '1'" class="pro-info">Weight : {{selectedProduct.weight + " " + selectedProduct.weight_unit || "N.A."}}</div>
+                    </div>
+                    <div class="pro-qty">
+                        <div ng-if="selectedProduct.is_dynamic == '0'" class="pro-title">Quantity</div>
+                        <div ng-if="selectedProduct.is_dynamic == '0'" class="pro-qty">
+                            <button class="clear pro-qty-minus border-pro" ng-click="decreaseQuality(selectedFromProduct.quantity)">-</button>
+                            <div ng-model="selectedFromProduct.quantity" class="pro-qty-val  border-pro">{{selectedFromProduct.quantity}}</div>
+                            <button class="clear pro-qty-plus border-pro" ng-click="increaseQuality(selectedFromProduct.quantity)">+</button>
+                        </div>
+                    </div>
+                    <!--<div class="pro-size">
+                        <div class="pro-title">Size</div>
+                        <div class="pro-size">
+                            <div id="pro-size-full" class="pro-size-val  border-pro pro-size-val-active" ng-click="slectedSize('pro-size-full')">Full</div>
+                            <div id="pro-size-half" class="pro-size-val  border-pro" ng-click="slectedSize('pro-size-half')">Half</div>
+                            <div id="pro-size-quarter" class="pro-size-val  border-pro" ng-click="slectedSize('pro-size-quarter')">Quarter</div>
+                        </div>
+                    </div>-->
+                    <!--<div class="pro-addone" ng-if="selectedProduct.product_addon > 0">
+                        <div class="pro-title">Addons</div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-sm-8 main-left no-padding" ng-show="!showProduct">
+                <div class="main-header no-padding">
+                    <div class="full-height float-left col-sm-8 no-padding text-center parent">
+                        <div class="header-display">
+                            <div class="order-qty"><button class="round-btn">{{finalOrder.order.miscellaneous.length}}</button></div>
+                            <div class="grand-total">Rs {{orderTotal}}</div>
+                            <div style="clear: both;"></div>
+                        </div>
+                    </div>
+                    <div class="full-height col-sm-4 no-padding" ng-disabled="finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0"
+                        ng-class="{'div-disable':finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0}"
+                        ng-click="!(finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0) && onChargeHandler(0)">
+                        <button class="btn-charge float-right ">CHARGE</button>
+                    </div>
+                </div>
+                <div class="main-options">
+                    <div class="order-type-main">
+                        <a id="oType{{item.type}}" ng-click="selectOrderType(item.type)" ng-class="{'order-type-active':item.type == selectedOrderType}" class="order-type"
+                            ng-repeat="item in orderTypeOptions">
+                            <img ng-if="selectedOrderType == item.type" class="order-type-img" src="{{item.aSrc}}"></img>
+                            <img ng-if="selectedOrderType != item.type" class="order-type-img" src="{{item.src}}"></img>
+                        </a>
+                    </div>
+                    <div class="cal-display" ng-if="selectedTab == 0">
+                        <input id="orderNameId" ng-model="finalOrder.order.orderName" class="float-left font18 margin-cal text-area-color order-name" maxlength="25" ng-focus="setKeyboardInputOption(true)" ng-blur="setKeyboardInputOption(false)" placeholder="{{currentOrderName + ' ' + miscellaneousCount}}"></input>
+                        <div class="font18 margin-cal text-area-color calval" ng-class="{'float-right': calVal.toString().length < 12}">
+                            <span>Rs {{calVal || "0.00"}}</span>
+                            <span>X</span>
+                            <span>{{quantity || 1}}</span>
+                            <!--<span ng-if="quantity != ''">{{quantity}}</span>
+                            <span ng-if="quantity == ''">0</span>-->
+                        </div>
+                    </div>
+                    <div class="cal-display" ng-if="selectedTab != 0">
+                        <div style="margin:19px" ng-if="selectedTab == 1 || selectedTab == 2" id="orderNameId" class="float-left font18 margin-cal text-area-color cat-info-name"><span class="pointer" ng-click="selectedTabAction(1)">Category ></span> {{(selectedMainCatgory ==
+                            null)? 'All' : selectedMainCatgory.name}}</div>
+                        <div style="margin:19px" ng-if="selectedTab == 3 || selectedTab == 4" id="orderNameId" class="float-left font18 margin-cal text-area-color cat-info-name">{{(selectedTab == 3)? 'Favorites' : 'Search Product'}}</div>
+                        <div ng-if="selectedTab != 4" class="float-right float-right font18 margin-cal text-area-color calval">
+                            <div class="swich-1" ng-if=" selectedViewType == 0" ng-click="changeViewType(1)"></div>
+                            <div class="swich-2" ng-if=" selectedViewType == 1" ng-click="changeViewType(2)"></div>
+                            <div class="swich-3" ng-if=" selectedViewType == 2" ng-click="changeViewType(0)"></div>
+                        </div>
+                    </div>
+                    <div style="clear: both;"></div>
+                </div>
+                <div class="main-calc" ng-if="selectedTab == 0">
+                    <div class="col-sm-3 full-height text-center no-padding">
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(1)">1</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(4)">4</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(7)">7</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction('.')">.</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 full-height text-center no-padding">
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(2)">2</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(5)">5</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(8)">8</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(0)">0</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 full-height text-center no-padding">
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(3)">3</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(6)">6</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction(9)">9</button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn" ng-click="inputCalFunction('X',true)">X</button>
+                        </div>
+                    </div>
+                    <div class="col-sm-3 full-height text-center no-padding">
+                        <div class="height25">
+                            <button class="cal-btn cal-back" ng-click="inputCalFunction('back',true)"></button>
+                        </div>
+                        <div class="height25">
+                            <button class="cal-btn cal-clear" ng-click="inputCalFunction('C',true)">C</button>
+                        </div>
+                        <div class="height50">
+                            <button class="cal-btn cal-add" ng-click="inputCalFunction('+',true)">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-calc" ng-if="selectedTab == 1">
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 0">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-def" style="background-color: #{{category.color_code}} !important">{{category.name}}</div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-def" style="background-color: #{{category.color_code}} !important">{{category.name}}</div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 1">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 2">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-calc" ng-if="selectedTab == 2">
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 0">
+
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-def" style="background-color: #{{category.color_code}} !important">{{category.name}}</div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-def" style="background-color: #{{category.color_code}} !important">{{category.name}}</div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 1">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 2">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-calc" ng-if="selectedTab == 3">
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 0">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-def">{{category.name}}</div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-def">{{category.name}}</div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 1">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-3 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cate-base col-sm-12" ng-if="selectedViewType == 2">
+                        <div ng-if="subCategories.product == undefined" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in categories"
+                            ng-click="openCategory(key,category)">
+                            <div class="cat-grid" style="background: url({{category.image}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                        <div ng-if="subCategories.product != ''" class="col-sm-4 text-center col-gap pointer" ng-repeat="(key, category) in subCategories.product"
+                            ng-click="showSelectedProduct(category)">
+                            <div class="cat-grid" style="background: url({{category.product_thumbnail}}) no-repeat top center">
+                            </div>
+                            <div class="grid-title">
+                                {{category.name}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-calc" ng-if="selectedTab == 4">
+                    <div class="search-section" style="margin-top:30px">
+                        <form name="searchProduct">
+                            <input class="search-input" type="text" name="username" ng-model="search.query" placeholder="Type (Name, ID, Code) or Scan Barcode to search" maxlength="50"
+                                required/>
+                            <button type="submit" style="position: absolute; left: -9999px; width: 1px; height: 1px;" tabindex="-1" ng-disabled="!searchProduct.$valid"
+                                ng-click="onSubmitQuery(search.query)">Hello</button>
+                        </form>
+                        <div ng-if="searchedProductList.length == 0 && showSearchError" style="margin-top: 30px; overflow: auto" align="center">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="32" viewBox="0 0 35 32" style="vertical-align:middle">
+                                <title> error</title>
+                                <desc> Created with Sketch.</desc>
+                                <g fill="none">
+                                    <g fill="#F39F33">
+                                        <path d="M34.2 26.4L0.8 26.4C0.4 26.4 0 26.1 0 25.6L0 0.8C0 0.3 0.4 0 0.8 0L34.2 0C34.6 0 35 0.3 35 0.8L35 25.6C35 26.1 34.6 26.4 34.2 26.4ZM1.6 24.9L33.4 24.9 33.4 1.6 1.6 1.6 1.6 24.9Z"
+                                        />
+                                        <path d="M21.2 31.6L13.8 31.6C13.4 31.6 13.1 31.2 13.1 30.8L13.1 25.6C13.1 25.2 13.4 24.9 13.8 24.9L21.2 24.9C21.6 24.9 21.9 25.2 21.9 25.6L21.9 30.8C21.9 31.2 21.6 31.6 21.2 31.6ZM14.6 30L20.4 30 20.4 26.4 14.6 26.4 14.6 30Z"
+                                        />
+                                        <rect x="4.4" y="30" width="26.1" height="1.6" />
+                                        <path d="M30.6 3.6L4.4 3.6C4 3.6 3.7 4 3.7 4.4L3.7 22C3.7 22.4 4 22.8 4.4 22.8L30.6 22.8C31 22.8 31.3 22.4 31.3 22L31.3 4.4C31.3 4 31 3.6 30.6 3.6ZM24.3 18.9L23.2 20 17.5 14.3 11.8 20 10.7 18.9 16.4 13.2 10.7 7.5 11.8 6.4 17.5 12.1 23.2 6.4 24.3 7.5 18.6 13.2 24.3 18.9Z"
+                                        />
+                                    </g>
+                                </g>
+                            </svg>
+                            <div style="display:inline-block;margin-left:10px;color:#F39F33">
+                                No Search Result Found
+                            </div>
+                        </div>
+                        <div ng-if="searchedProductList.length == 0 && !showSearchError" align="center" style="margin-top: 30px; overflow: auto">
+                            <img src="assets/img/barcode-scanner@3x.png" alt="" style="height: 200px;width:250px;margin-top:50px">
+                            <div style="margin-top:20px" class="font-medium-24">
+                                Start Scanning or Typing to Search
+                            </div>
+                        </div>
+
+                        <div ng-if="searchedProductList.length != 0" style="margin-top: 30px; overflow: auto" ng-repeat="item in searchedProductList">
+                            <div style="overflow:auto;display:flex;min-height:90px" class="text-center" ng-init="addProductFromSearch.quantity = 1">
+                                <div class="col-md-2 search-item-button no-right-border no-padding">
+                                    <img ng-if="item.product_thumbnail != ''" style="max-height:70px; max-width: 70px; height: auto; width: auto" src="{{item.product_thumbnail}}">
+                                    <!--<img ng-if="item.product_thumbnail == ''" style="max-height:70px; max-width: 70px; height: auto; width: auto" src="assets/img/Placeholder.png">-->
+                                    <div ng-if="item.product_thumbnail == ''" style="max-height:70px; max-width: 70px; height: 70px; width:70px;background:url('assets/img/Placeholder.png') no-repeat center;background-size: 140px 140px;">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 search-item-button text-left no-right-border" style="display:flex; align-items:center">
+                                    <div class="col-md-6">
+                                        {{item.name}}<br/>@Rs {{item.discounted_price}}
+                                    </div>
+                                    <div class="col-md-6" ng-if="item.is_dynamic == '0'">
+                                        <div class="col-md-4 quantity-button text-center pointer" ng-click="addProductFromSearch.quantity = (addProductFromSearch.quantity <= 1 ? 1 : addProductFromSearch.quantity - 1 )">-</div>
+                                        <div style="background-color: white" class="col-md-4 quantity-button text-center no-border">{{addProductFromSearch.quantity}}</div>
+                                        <div class="col-md-4 quantity-button text-center pointer" ng-click="addProductFromSearch.quantity = addProductFromSearch.quantity + 1">+</div>
+                                    </div>
+                                    <div class="col-md-6 text-center" ng-if="item.is_dynamic == '1'">
+                                        {{item.weight}} {{item.weight_unit}}
+                                    </div>
+                                </div>
+                                <div class="col-md-2 search-item-button light-background no-right-border pointer" ng-click="showSelectedProduct(item)">VIEW</div>
+                                <div class="col-md-2 search-item-button dark-background no-right-border pointer" ng-click="addProductInOrder(item, addProductFromSearch)">ADD</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="main-footer">
+                    <div class="bottom-logo float-left">
+                        <img src="assets/img/logo.png"></img>
+                    </div>
+                    <div class="main-tabs float-left" ng-if="!isRetailType">
+                        <button id="tab0" class="tab-btn tab-btn-active" ng-click="selectedTabAction(0)">Register</button>
+                        <button id="tab1" class="tab-btn" ng-click="selectedTabAction(1)">Categories</button>
+                        <button id="tab2" class="tab-btn" ng-click="selectedTabAction(2)">All</button>
+                        <button id="tab3" class="tab-btn" ng-click="selectedTabAction(3)">Favorites</button>
+                    </div>
+                    <div class="main-tabs float-left" ng-if="isRetailType">
+                        <button id="tab0" class="tab-btn tab-btn-active" style="width:100%" ng-click="selectedTabAction(0)">Register</button>
+                    </div>
+                    <div id="tab4" class="search-btn float-left" ng-click="selectedTabAction(4)">
+                        <img src="assets/img/search.png"></img>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4 main-right no-padding">
+                <div class="user-info overflow-auto">
+                    <div class="user-name col-sm-12">Hello {{username || "N.A."}}</div>
+                    <!--<div class="sync-btn col-sm-3"></div>-->
+                </div>
+                <div class="settings overflow-auto">
+                    <button class="setting-btn col-sm-6" ng-click="openSetting()">Settings</button>
+                    <button class="setting-btn col-sm-6" ng-click="openAllOrder()">All Orders</button>
+                </div>
+                <div ng-if="!showCustomerProfile">
+                    <button ng-click="onChargeHandler(2)" class="setting-btn full-width">Look Up Customer<i class="lookup-icon"></i></button>
+                </div>
+                <div ng-if="showCustomerProfile" class="lookup" style="overflow-x:hidden;overflow-y:auto">
+                    <div class="col-sm-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="52" height="52" viewBox="0 0 52 52">
+                            <title> placeholder_user</title>
+                            <desc> Created with Sketch.</desc>
+                            <g fill="none">
+                                <g fill="#484848">
+                                    <path d="M25.9 0C11.7 0 0.2 11.5 0.2 25.7 0.2 34.4 4.6 42.1 11.2 46.7 11.4 47 11.7 47.2 12.1 47.3 13.9 48.5 16 49.5 18.2 50.2L18.3 50.3 18.5 50.3C20.8 51 23.3 51.4 25.9 51.4 31.1 51.4 35.8 49.9 39.9 47.3 40.2 47.1 40.5 46.9 40.7 46.7 47.3 42.1 51.7 34.4 51.7 25.7 51.7 11.5 40.1 0 25.9 0L25.9 0ZM41.5 44.7C41.5 44.3 41.4 43.9 41.2 43.5 39.8 40.9 37.5 39 34.6 38.2L31.3 37.2C30.2 36.9 29.6 35.7 29.9 34.5 30 34.3 30.2 34.1 30.3 33.9L32.7 31.2C34.3 29.4 35 27 34.7 24.7L34.3 21.4C34.1 19 32.7 16.7 30.6 15.4L30.5 15.4C27.7 13.6 24.1 13.6 21.3 15.5L21.3 15.5C19.4 16.8 18.1 18.8 17.8 21.1L17.3 24.5C16.9 27 17.6 29.5 19.3 31.4L21.5 33.9C21.7 34.1 21.8 34.3 21.9 34.5 22.3 35.6 21.7 36.9 20.5 37.2L17.2 38.2C14.4 39 12 41 10.6 43.5 10.5 43.9 10.3 44.3 10.3 44.7 4.9 40.2 1.4 33.4 1.4 25.7 1.4 12.2 12.4 1.1 25.9 1.1 39.5 1.1 50.5 12.2 50.5 25.7 50.5 33.4 47 40.2 41.5 44.7L41.5 44.7Z"
+                                    />
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <div class="col-sm-8 no-padding">
+                        <div class="text-wrap name">{{finalOrder.order.customer_name || "N.A."}}</div>
+                        <div class="text-wrap phone">{{phoneNumber || "N.A."}}</div>
+                    </div>
+                    <div class="col-sm-1 no-padding close" ng-click="clearCustomerProfile()">X</div>
+                </div>
+                <div class="currentOrder parent overflow-auto">
+                    <div class="currentOrder-lbl valign-center">Current Order</div>
+                    <button data-toggle="modal" data-target="#deleteallOrder" class="clear del-btn" ng-disabled="finalOrder.order.miscellaneous.length <=0 && finalOrder.order.product.length <= 0"><i class="delete-icon"></i></button>
+                </div>
+                <div class="order-list" ng-if="finalOrder.order.miscellaneous.length >0 || finalOrder.order.product.length>0">
+                    <div class="list-heading row no-margin">
+                        <div class="col-sm-4 list-item">Items</div>
+                        <div class="col-sm-3 text-center list-item">Qty</div>
+                        <div class="col-sm-5 text-right list-item">Amount</div>
+                        <div class="col-sm-2 text-right list-item"></div>
+                    </div>
+                    <form name="cOrderForm">
+                        <ul class="list-group float-left full-width border-bottom list-order">
+                            <li id="listItem" class="list-group-item list-item-custom" ng-repeat="pitem in finalOrder.order.product">
+                                <div class="float-left full-width">
+                                    <div class="col-sm-4 list-item text-area-color">{{pitem.name}}</div>
+                                    <div ng-if="pitem.quantity_unit == 'unit'" class="col-sm-3 text-center list-item text-area-color">{{pitem.quantity}}</div>
+                                    <div ng-if="pitem.quantity_unit != 'unit'" class="col-sm-3 text-center list-item text-area-color">{{pitem.quantity +" "+ pitem.quantity_unit}}</div>
+                                    <div class="col-sm-3 text-right list-item text-area-color">{{pitem.amount}}</div>
+                                    <div class="col-sm-2 text-center"><button class="clear delete-icon" ng-click="deleteOrderItem($index,0)"></button></div>
+                                </div>
+                                <div class="list-item-basic text-area-color">Basic @{{pitem.price}}</div>
+                            </li>
+                            <li id="listItem" class="list-group-item list-item-custom" ng-repeat="item in finalOrder.order.miscellaneous">
+                                <div class="float-left full-width">
+                                    <div class="col-sm-4 list-item text-area-color">{{item.name}}</div>
+                                    <div class="col-sm-3 text-center list-item text-area-color">{{item.quantity}}</div>
+                                    <div class="col-sm-3 text-right list-item text-area-color">{{item.amount}}</div>
+                                    <div class="col-sm-2 text-center"><button class="clear delete-icon" ng-click="deleteOrderItem($index,1)"></button></div>
+                                </div>
+                                <div class="list-item-basic text-area-color">Basic @{{item.price}}</div>
+                            </li>
+
+                            <li id="listItem" class="list-group-item list-item-custom" ng-if="finalOrder.order.discount_percentage">
+                                <div class="float-left full-width">
+                                    <div class="col-sm-6 list-item text-center" style="color:#009587">Discount</div>
+                                    <div class="col-sm-6 list-item text-center" style="color:#009587">Rs {{finalOrder.order.discount_amount}} (at {{finalOrder.order.discount_percentage}}%)</div>
+                                </div>
+                            </li>
+
+                            <div class="text-center"><button ng-class="{'note-saved':finalOrder.order.order_note.length > 0}" class="clear add-note"
+                                    ng-model='finalOrder.order.order_note' data-toggle="modal" data-target="#addnote">{{(finalOrder.order.order_note.length > 0) ? 'Edit Note' : 'Add Note'}}</button></div>
+                        </ul>
+                    </form>
+                </div>
+                <div ng-if="finalOrder.order.miscellaneous.length ==0 && finalOrder.order.product.length ==0" class="text-center">
+                    <img class="no-record" src="assets/img/hand-gesture.png"></img>
+                    <div class="no-record-label">Add some products to create a new order</div>
+                </div>
+                <div class="saveOpt" ng-if="finalOrder.order.miscellaneous.length >0 || finalOrder.order.product.length >0">
+                    <!--<button class="setting-btn savebtn" ng-disabled="(finalOrder.order.miscellaneous.length ==0 && finalOrder.order.product.length ==0) || !showSave"
+                        ng-click="onChargeHandler(1)" ng-show="selectedOrderType!=1">Save</button>-->
+
+                    <button class="setting-btn savebtn col-sm-6" ng-disabled="!showSave"
+                        ng-click="onChargeHandler(1)">Save</button>
+
+                    <button class="setting-btn savebtn col-sm-6" ng-disabled="showSave"
+                        ng-click="createNewOrder()">New</button>
+                </div>
+                <div class="order-total overflow-auto" ng-disabled="finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0"
+                    ng-class="{'div-disable':finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0}"
+                    ng-click="!(finalOrder.order.miscellaneous.length == 0 && finalOrder.order.product.length ==0) && onChargeHandler(0)">
+                    <div class="float-left order-total-display col-sm-6 no-padding">
+                        <div class="order-total-price">Rs {{orderTotal}}</div>
+                    </div>
+                    <div class="float-right full-height col-sm-6">
+                        <button class="clear full-height right-charge-btn">Checkout</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="successOrder" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="full-width text-center">
+                        <img src="assets/img/success.png" style="height: 90px;"></img>
+                        <div class="order-success-body-text">Order Successfully Paid And Completed</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="clear addnote-done-btn form-left-half" data-dismiss="modal" ng-click="skipPrint()">Skip Print and Continue</button>
+                    <button type="button" class="clear addnote-done-btn form-left-right" data-dismiss="modal" ng-click="printOrder()">Print Receipt</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="saveOrder" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <form name="saveOrderForm">
+                    <div class="modal-header">
+                        <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                        <button type="button" class="close-addnote" ng-show="operation == 0 && selectedOrderType == 0" data-dismiss="modal" id="skipbtn" ng-click="saveCurrentOrder()">Skip</button>
+                    </div>
+                    <div class="modal-body no-float-input">
+                        <div class="full-width input-section">
+                            <label for="customerName">Customer Name</label>
+                            <input ng-keypress="allowAlphabetsOnly($event)" class="font-medium-24 full-width" type="text" name="customerName" ng-model="finalOrder.order.customer_name" />
+                            <span class="bar"></span>
+                        </div>
+                        <div class="input-section">
+                            <label for="mobileNumber">Mobile Number</label>
+                            <div class="col-md-2 font-medium-24" style="color: #D4D4D4; border-bottom: 1px solid #D4D4D4">{{countryCode}}</div>
+                            <input ng-keypress="allowNumbersOnly($event)" class="font-medium-24 col-md-10 no-padding" type="tel" name="mobileNumber"
+                                maxlength="10" ng-model="phoneNumber" />
+                            <span class="bar" style="clear:both"></span>
+                        </div>
+                        <div class="full-width input-section">
+                            <label for="emailId">Email Id</label>
+                            <input ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" class="font-medium-24 full-width" type="text" name="emailId" ng-model="finalOrder.order.customer_email" />
+                            <span class="bar"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="clear addnote-done-btn" ng-disabled="saveOrderValidation()" data-dismiss="modal" ng-click="saveCurrentOrder()"
+                            value="Continue">Continue</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteallOrder" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div>
+                        <div class="float-left popuptext"> you sure you want to delete this order?</div>
+                        <div class="float-right popbtn-base">
+                            <button ng-click="deleteOrder();" data-dismiss="modal" class="pop-btn" style="border-bottom: 1px solid #979797 !important;">Yes</button>
+                            <button data-dismiss="modal" class="pop-btn">No</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="addnote" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-label">Add Note ( {{(finalOrder.order.order_note.length == undefined)? 0 : finalOrder.order.order_note.length}}
+                        /150 )
+                    </div>
+                    <form class="float-label" name="addnoteForm">
+                        <div class="control">
+                            <textarea maxlength="150" rows="5" cols="40" class="add-note-imput" type="text" name="addnote" ng-model="finalOrder.order.order_note"
+                                placeholder="Please write your note" required></textarea>
+                            <!-- yes, this is not nice, in real live, do it with JS -->
+                            <label for="addnote">Please write your note</label>
+                            <span class="bar"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="clear addnote-done-btn" data-dismiss="modal">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="otherOptions" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label class="payment-hlabel">Other Option</label>
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="float-left font-regular-24 d3d3d3">Amount</div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="float-left font-regular-24 d3d3d3">{{orderTotal}}</div>
+                            <!--<div class="dotted-btn float-right">Details</div>-->
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 35px;">
+                        <div class="col-sm-6">
+                            <div class="float-left font-regular-24 color4cad8e">Reference ID</div>
+                        </div>
+                        <div class="col-sm-6 other-option-text">
+                            <input maxlength="40" ng-model="paymentDetail" class="float-left font-regular-24 color4cad8e other-option-input" placeholder="No. / Text"></input>
+                            <!--<div class="border-btn float-right">ABC</div>-->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="clear addnote-done-btn" data-dismiss="modal" ng-click="paymentOption('otherPay',paymentDetail)">Charge</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cashPayment" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label class="payment-hlabel">Cash Payment</label>
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <form name="cashPaymentForm">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div class="float-left font-regular-24 d3d3d3">Total Amount</div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="float-left font-regular-24 d3d3d3">Rs {{orderTotal}}</div>
+                                <!--<div class="dotted-btn float-right">Details</div>-->
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 50px;">
+                            <div class="col-sm-7">
+                                <div class="float-left font-regular-24 color4cad8e">Payment</div>
+                            </div>
+                            <div class="col-sm-5 other-option-text">
+                                <input maxlength="7" ng-model="cashAmountPaid" class="float-left font-regular-24 color4cad8e other-option-input" placeholder="Rs {{orderTotal}}" ng-keypress="allowNumbersOnly($event)"></input>
+                            </div>
+                        </div>
+                        <div class="row cash-order-bal">
+                            <div class="col-sm-7">
+                                <div class="float-left font-regular-24 d3d3d3">Balance</div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="float-left font-regular-24 d3d3d3">Rs {{ calBalanceleft(orderTotal,cashAmountPaid) }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="clear addnote-done-btn" ng-disabled="calBalanceleft(orderTotal,cashAmountPaid) < 0" data-dismiss="modal" ng-click="paymentOption('cash', '')">Charge</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="creditDebitOption" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label class="payment-hlabel">Credit/Debit Card</label>
+                    <button ng-if="transactionCancelled" type="button" class="close-addnote float-right" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body font-regular-24" style="color:white">
+                    {{progressText}}
+                </div>
+                <div class="modal-footer" ng-click="cancelTransaction()" data-dismiss="modal">
+                    <button type="button" class="clear addnote-done-btn">{{progressBtnText}}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="alertBox" role="dialog">
+        <div class="modal-dialog">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close-addnote float-right" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body no-border text-center" style="color:#f39f33; font-size:20px">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="35" height="32" viewBox="0 0 35 32" style="vertical-align:middle">
+                        <title> error</title>
+                        <desc> Created with Sketch.</desc>
+                        <g fill="none">
+                            <g fill="#F39F33">
+                                <path d="M34.2 26.4L0.8 26.4C0.4 26.4 0 26.1 0 25.6L0 0.8C0 0.3 0.4 0 0.8 0L34.2 0C34.6 0 35 0.3 35 0.8L35 25.6C35 26.1 34.6 26.4 34.2 26.4ZM1.6 24.9L33.4 24.9 33.4 1.6 1.6 1.6 1.6 24.9Z"
+                                />
+                                <path d="M21.2 31.6L13.8 31.6C13.4 31.6 13.1 31.2 13.1 30.8L13.1 25.6C13.1 25.2 13.4 24.9 13.8 24.9L21.2 24.9C21.6 24.9 21.9 25.2 21.9 25.6L21.9 30.8C21.9 31.2 21.6 31.6 21.2 31.6ZM14.6 30L20.4 30 20.4 26.4 14.6 26.4 14.6 30Z"
+                                />
+                                <rect x="4.4" y="30" width="26.1" height="1.6" />
+                                <path d="M30.6 3.6L4.4 3.6C4 3.6 3.7 4 3.7 4.4L3.7 22C3.7 22.4 4 22.8 4.4 22.8L30.6 22.8C31 22.8 31.3 22.4 31.3 22L31.3 4.4C31.3 4 31 3.6 30.6 3.6ZM24.3 18.9L23.2 20 17.5 14.3 11.8 20 10.7 18.9 16.4 13.2 10.7 7.5 11.8 6.4 17.5 12.1 23.2 6.4 24.3 7.5 18.6 13.2 24.3 18.9Z"
+                                />
+                            </g>
+                        </g>
+                    </svg>
+                    <div style="display:inline;margin-left:10px;">
+                        {{alertText}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="paymentOptions" role="dialog">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <label class="payment-hlabel">Payment Options - For Retail</label>
+                    <button type="button" class="close-addnote float-right" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body no-padding">
+                    <div>
+                        <div class="col-sm-6 text-center pay-option border-right border-bottom" data-dismiss="modal" ng-click="sendTransactionToEdc()">
+                            <div class="pay-option-img">
+                                <img src="assets/img/credit_debit_card.png"></img>
+                            </div>
+                            <label class="pay-option-label">Credit / Debit Card</label>
+                        </div>
+                        <div class="col-sm-6 text-center pay-option border-bottom" data-dismiss="modal">
+                            <div class="pay-option-img">
+                                <img src="assets/img/qr_code_mobile.png"></img>
+                            </div>
+                            <label class="pay-option-label">Generate QR Code</label>
+                        </div>
+                    </div>
+                    <div>
+                        <!--ng-click="cashPaymentClicked();"-->
+                        <div class="col-sm-6 text-center pay-option border-right" data-dismiss="modal" data-toggle="modal" data-target="#cashPayment">
+                            <div class="pay-option-img">
+                                <img src="assets/img/cash_payment.png"></img>
+                            </div>
+                            <label class="pay-option-label">Cash Payment</label>
+                        </div>
+                        <div class="col-sm-6 text-center pay-option" data-dismiss="modal" data-toggle="modal" data-target="#otherOptions">
+                            <div class="pay-option-img">
+                                <img style="margin-top: 35px;" src="assets/img/more.png"></img>
+                            </div>
+                            <label class="pay-option-label">Other Options</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="clear addnote-done-btn" data-dismiss="modal">Charge Later</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="modal fade" id="scanNPay" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <label class="payment-hlabel">Scan n Pay</label>
+                <button type="button" class="close-addnote float-right" data-dismiss="modal" ng-click="closeScanNPayModel();">X</button>
+            </div>
+            <div class="modal-body2">
+                <div class="row" style="margin-top:10px;">
+                    <div class="col-sm-8">
+                        <div class="float-left font-regular-24 d3d3d3">Total Amount</div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="float-left font-regular-24 d3d3d3">Rs {{orderTotal}}</div>
+                        <div class="dotted-btn float-right">Details</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-body3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="float-left font-regular-24">Select Table</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body no-padding">
+                <div ng-repeat="x in merchant_location">
+                    <div class="col-sm-3 text-center pay-option" data-dismiss="modal">
+                        <div class="pay-option-img">
+                            <a ng-if="x.is_blockable ==0" ng-click="selectedScanNPay($index+1,1,x)">
+                                <img src="assets/img/main_counter.png" data-mainimg="assets/img/main_counter.png" id="pType{{$index+1}}" style="width:101px;height:78px;cursor:pointer;"
+                                    ng-if="x.is_blockable ==0"></img>
+                                <label class="scanNPay-option-label">{{$index+1}}</label>
+                            </a>
+
+                            <a ng-if="x.is_blockable ==1" ng-click="selectedScanNPay($index+1,0,x)">
+                                <img src="assets/img/table.png" id="pType{{$index+1}}" data-mainimg="assets/img/table.png" style="width:101px;height:78px;cursor:pointer;"
+                                    ng-if="x.is_blockable ==1"></img>
+                                <label class="scanNPay-option-label">{{$index+1}}</label>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="close-addnote float-left" ng-click="closeScanNPayModel();" style="float:left;padding:18px;width:20%;height:auto;"
+                    data-dismiss="modal">X</button> <button type="button" style="width:80%; float:right;padding:15px;"
+                    class="clear addnote-done-btn" data-dismiss="modal" ng-click="chargebtnScanNPay(0);" ng-show="!isSaveClicked">Charge</button>
+                <button type="button" style="width:80%; float:right;padding:15px;" class="clear addnote-done-btn" data-dismiss="modal" ng-show="isSaveClicked"
+                    ng-click="chargebtnScanNPay(1);">Save</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deliveryAddress" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="deliveryAddressForm">
+                <div class="modal-header">
+                    <label class="payment-hlabel float-left">Delivery Address</label>
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body float-label overflow-auto">
+                    <div class="input-section control" style="margin-top:10px">
+                        <input class="full-width" type="text" name="zipcode" ng-model="finalOrder.order.address.zip" placeholder="Zipcode" ng-keypress="allowNumbersOnly($event)"
+                            maxlength="6" ng-blur="getGeoLocation(finalOrder.order.address.zip)" required/>
+                        <label for="zipcode" ng-class="{'filled':finalOrder.order.address.zip.length >= 1}">Zipcode</label>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="input-section control">
+                        <input class="full-width" type="text" name="phonenumber" ng-model="finalOrder.order.address.contact_number" placeholder="Phone Number"
+                            ng-keypress="allowNumbersOnly($event)" maxlength="10" required/>
+                        <label for="phonenumber" ng-class="{'filled':finalOrder.order.address.contact_number.length >= 1}">Phone Number</label>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="input-section control">
+                        <input class="full-width" type="text" name="name" ng-model="finalOrder.order.address.first_name" maxlength="30" placeholder="Name" required/>
+                        <label for="name" ng-class="{'filled':finalOrder.order.address.first_name.length >= 1}">Name</label>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="input-section control">
+                        <input class="full-width" type="text" name="addressLine1" ng-model="finalOrder.order.address.address1" placeholder="Address Line 1"
+                            maxlength="40" required/>
+                        <label for="addressLine1" ng-class="{'filled':finalOrder.order.address.address1.length >= 1}">Address Line 1</label>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="input-section control">
+                        <input class="full-width" type="text" name="addressLine2" ng-model="finalOrder.order.address.address2" placeholder="Address Line 2"
+                            maxlength="40" />
+                        <label for="addressLine2" ng-class="{'filled':finalOrder.order.address.address2.length >= 1}">Address Line 2</label>
+                        <span class="bar"></span>
+                    </div>
+                    <div class="full-width overflow-auto input-section">
+                        <div style="width:45%; display: inline-block; padding-left:0px; padding-right:0px" class="control col-sm-6">
+                            <input  type="text" name="city" ng-model="finalOrder.order.address.city" placeholder="City" maxlength="20" required/>
+                            <label for="city" ng-class="{'filled':finalOrder.order.address.city.length >= 1}">City</label>
+                            <span class="bar"></span>
+                        </div>
+                        <div style="width:45%; display: inline-block; padding-left:0px; padding-right:0px;margin-left:10%" class="control col-sm-6">
+                            <input style="display: inline-block;padding-right:0px;" type="text" name="state" ng-model="finalOrder.order.address.state" placeholder="State"
+                                maxlength="20" required/>
+                            <label for="state" ng-class="{'filled':finalOrder.order.address.state.length >= 1}">State</label>
+                            <span class="bar"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="clear addnote-done-btn" ng-disabled="!deliveryAddressForm.$valid" data-dismiss="modal" ng-click="saveDeliveryOrder()"
+                        value="Continue">Save Address</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="pickUpOrder" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form name="pickUpOrderForm">
+                <div class="modal-header">
+                    <label class="payment-hlabel float-left">Pickup Order</label>
+                    <button type="button" class="close-addnote" data-dismiss="modal">X</button>
+                </div>
+                <div class="modal-body2">
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-8">
+                            <div class="float-left font-regular-24 d3d3d3">Total Amount</div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="float-left font-regular-24 d3d3d3">Rs {{orderTotal}}</div>
+                            <!--<div class="dotted-btn float-right">Details</div>-->
+                        </div>
+                    </div>
+                    <!--<div class="float-label overflow-auto">
+                        <div class="input-section control" style="margin-top:10px">
+                            <input class="full-width" type="text" name="name" ng-model="pickUpOrder.name" placeholder="Name Of Order" maxlength="45"/>
+                            <label for="name" ng-class="{'filled':pickUpOrder.name.length >= 1}">Name Of Order</label>
+                            <span class="bar"></span>
+                        </div>
+                    </div>-->
+                </div>
+                <div class="modal-body3">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="float-left" style="font-size:20px">Select Pickup Location</div>
+                        </div>
+                        <div class="pickup-location-container">
+                            <div ng-click="selectPickUpLocation(location)" class="pickup-location" ng-repeat="location in pickUpLocations" ng-class="{'selected': location.id == finalOrder.order.pickup_id}">
+                                <div class="text-center index">
+                                    <span style="position:relative;top:5px">{{$index + 1}}</span>
+                                </div>
+                                <div class="location">
+                                    {{location.location}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer overflow-auto">
+                    <button type="submit" class="clear addnote-done-btn" ng-disabled="selectedPickUpLocation == -1" data-dismiss="modal" ng-click="saveOrder()"
+                        value="Continue">Confirm Pickup And Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+</div>

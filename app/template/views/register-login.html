@@ -1,0 +1,54 @@
+<div class="app-background"></div>
+<div class="main-container">
+    <section id="content">
+        <div class="content-wrap">
+            <div class="container login-screen">
+                <div class="text-center">
+                    <img src="./assets/img/POSLogo.png" class="logo"></img>
+                </div>
+                <div class="login-section">
+                    <form class="float-label" name="loginForm">
+                        <div class="control">
+                            <input class="login-input" type="text" name="username" ng-model="loginData.username" placeholder="Username" required/>
+                            <!-- yes, this is not nice, in real live, do it with JS -->
+                            <label for="username">UserName</label>
+                            <span class="bar"></span>
+                        </div>
+                        <div class="control password">
+                            <input class="login-input" type="{{inputType}}" name="password" ng-model="loginData.password" placeholder="Password" maxlength="12" required/>
+                            <!-- yes, this is not nice, in real live, do it with JS -->
+                            <label for="password">Password</label>
+                            <span class="bar"></span>
+                        </div>
+                        <div ng-click="hideShowPassword()" class="float-right pointer" style="position:relative;margin-top:-43px;z-index:10px">
+                            <i ng-if="inputType == 'password'" class="fa fa-eye" style="color:white;font-size:25px" aria-hidden="true"></i>
+                            <i ng-if="inputType == 'text'" class="fa fa-eye-slash" style="color:white;font-size:25px" aria-hidden="true"></i>
+                        </div>
+
+                        <div class="text-center" style="float:left;width:100%;margin-top:10px" ng-init="loginData.type=0">
+                            <div class="col-md-6">
+                                <input id="merchantRadio" type="radio" ng-model="loginData.type" value="0" />
+                                <label for="merchantRadio"><span class="outerCircle"><span class="innerCircle"></span></span>Merchant</label>
+                            </div>
+                            <div class="col-md-6">
+                                <input id="managerRadio" type="radio" ng-model="loginData.type" value="1" />
+                                <label for="managerRadio"><span class="outerCircle"><span class="innerCircle"></span></span>Manager</label>
+                            </div>
+                        </div>
+                        <div class="control text-center">
+                            <button class="button-standard font-medium-28 E5" ng-disabled="!loginForm.$valid" ng-click="login(loginData)" type="submit"><i ng-show="islogging" class="fa fa-spinner fa-spin"></i> Login</button>
+                            <div class="error-show" ng-show="loginErr != ''">{{loginErr}}</div>
+                        </div>
+                    </form>
+                </div>
+                <div class="login-bottom-section text-center">
+                    <h3 class="light-color font-medium-24">Or</h3>
+                </div>
+                <div class="login-bottom-section text-center">
+                    <div class="float-left dotted-button" ng-click="openJoinNow()">Forgot Password</div>
+                    <div class="float-right dotted-button" ng-click="openForgotPassword()">Join Now For Free</div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

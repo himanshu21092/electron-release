@@ -1,0 +1,73 @@
+{
+  "name": "POS",
+  "version": "1.0.0",
+  "description": "POS is an app for ...",
+  "main": "main.js",
+  "build": {
+    "appId": "com.skyinnolabs.pos",
+    "mac": {
+      "title": "POS",
+      "icon": "./build/icon.icns",
+      "icon-size": 80,
+      "background": "build/background.png",
+      "contents": [
+        {
+          "x": 510,
+          "y": 250,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 225,
+          "y": 250,
+          "type": "file",
+          "path": "computed path to artifact, do not specify it - will be overwritten"
+        }
+      ]
+    },
+    "win": {
+      "iconUrl": "http://8alert.com/download/client/windows/icon.ico",
+      "title": "POS",
+      "version": "1.0.0",
+      "authors": "Himanshu Mishra"
+    },
+    "linux": {
+      "title": "POS",
+      "icon": "./build/icon.icns"
+    }
+  },
+  "scripts": {
+    "start": "electron .",
+    "postinstall": "install-app-deps",
+    "pack": "build --dir",
+    "linux": "build --linux",
+    "win32": "build --win --ia32",
+    "win64": "build --win",
+    "mac": "build --mac",
+    "reload": "live-reload app --port 35729"
+  },
+  "repository": "",
+  "keywords": [
+    "POS"
+  ],
+  "author": "Himanshu Mishra",
+  "license": "CC0-1.0",
+  "devDependencies": {
+    "7zip-bin-linux": "^1.0.0",
+    "electron": "^1.4.7",
+    "electron-builder": "^8.6.0",
+    "electron-packager": "^8.2.0",
+    "electron-rebuild": "^1.5.7",
+    "electron-updater": "^2.1.1",
+    "live-reload": "^1.1.0"
+  },
+  "dependencies": {
+    "bonjour": "^3.5.0",
+    "electron-json-storage": "^3.0.5",
+    "electron-printer": "0.0.5",
+    "lodash": "^4.17.2",
+    "open": "0.0.5",
+    "pushy": "^2.0.3",
+    "websocket": "^1.0.24"
+  }
+}

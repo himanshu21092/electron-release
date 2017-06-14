@@ -1,0 +1,85 @@
+﻿<!DOCTYPE html>
+<html dir="ltr" id="app-container" lang="en-US" ng-app="POSApp">
+
+<head>
+    <title>POS</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    
+    <style>
+        .loader-back {
+            background-color: rgba(255, 255, 255, 0.8);
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0px;
+            left: 0px;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .loader{
+            height: 100px;
+            width: 100px;
+            animation: rotate 1.5s infinite;
+        }
+        @keyframes rotate {
+            0%   {transform: rotate(0deg)}
+            50%  {transform: rotate(45deg)}
+            100% {transform: rotate(90deg)}
+        }
+    </style>
+    <script>
+        window.$ = window.jQuery = require('./lib/jquery-1.11.3.min.js');
+        var myVar;
+        $(window).load(function () {
+            myVar = setTimeout(appLoaded, 100)
+        });
+        function appLoaded() {
+            $('.loader-back').hide();
+            clearTimeout(myVar);
+        }
+    </script>
+    <script src="js/jquery.scannerdetection.js"></script>
+</head>
+
+<body class="stretched no-transition">
+    <div class="loader-back">
+        <div class="loader" ng-controller="loadingIndicatorCtrl">
+            <img class="loader" src="assets/img/loader.png">
+        </div>
+    </div>
+    <div id="wrapper" class="clearfix">
+        <!-- Document Wrapper ============================================= -->
+        <div class="display-none" ui-view="headerView" class="header-view"></div>
+        <div ui-view="contentView" class="content-view"></div>
+        <div class="display-none" ui-view="footerView" class="footer-view"></div>
+    </div>
+</body>
+<link href="http://fonts.googleapis.com/css?family=Lato:300,400,400italic,600,700|Raleway:300,400,500,600,700|Crete+Round:400italic"
+    rel="stylesheet" type="text/css" />
+<link rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.6.3/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/style.css" type="text/css" />
+<link rel="stylesheet" href="css/responsive.css" type="text/css" />
+<link rel="stylesheet" href="css/fonts.css" type="text/css" />
+<script type="text/javascript" src="lib/angular.min.js"></script>
+<script type="text/javascript" src="lib/angular-ui-router.min.js"></script>
+<!-- checked -->
+<script type="text/javascript" src="lib/angular-route.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+<script type="text/javascript" src="js/routes.js"></script>
+<script type="text/javascript" src="js/directive-factory.js"></script>
+<!--checked-->
+<script type="text/javascript" src="js/controllers.js"></script>
+<script type="text/javascript" src="js/constants.js"></script>
+<script type="text/javascript" src="js/loadingIndicator.js"></script>
+<script type="text/javascript" src="js/common.js"></script>
+<script type="text/javascript" src="../bower_components/angular-websql/angular-websql.min.js"></script>
+<script src="js/moment.js"></script>
+<script src="js/moment-with-locales.js"></script>
+<script src="http://localhost:35729/livereload.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+</html>
